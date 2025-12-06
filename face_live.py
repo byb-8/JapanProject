@@ -29,8 +29,7 @@ while True:
                 x = int(lm.x * frame.shape[1])
                 y = int(lm.y * frame.shape[0])
                 cv2.circle(frame, (x, y), 1, (0,255,0), -1)
-
-            # Head Pose 계산 -----------------------------------------
+            # 헤드포인트
             image_points = np.array([
                 (face_landmarks.landmark[1].x * frame.shape[1],
                  face_landmarks.landmark[1].y * frame.shape[0]),    # 코 끝
@@ -83,23 +82,22 @@ while True:
             cv2.putText(frame, f"Pitch: {pitch_deg:.1f}", (10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
             cv2.putText(frame, f"Roll: {roll_deg:.1f}", (10,90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
 
-            # ---------------------------------------------------------
-            # Direction Classification
+
             direction = "front"
 
-            if yaw_deg > 15:
+            if yaw_deg > 10:
                 direction = "right"
             elif yaw_deg < -15:
                 direction = "left"
             elif pitch_deg > 10:
-                direction = "top"
-            elif pitch_deg < -10:
                 direction = "bottom"
+            elif pitch_deg < -20:
+                direction = "top"
 
             if roll_deg > 10:
-                direction += " + 오른쪽으로 기울임"
+                direction += " + roll right"
             elif roll_deg < -10:
-                direction += " + 왼쪽으로 기울임"
+                direction += " + roll left"
 
             cv2.putText(frame, f"Direction: {direction}", (10, 130),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,255), 2)
